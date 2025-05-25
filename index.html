@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A comprehensive platform for students and faculty">
+  <meta name="theme-color" content="#007bff">
+  <title>Student Management System</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+  <div class="landing-page">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <div class="header-content">
+            <h1 class="display-4">Student Management System</h1>
+            <p class="lead">A comprehensive platform for students and faculty</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-4">
+          <div class="card portal-card">
+            <div class="card-body text-center">
+              <h3 class="card-title">Student Portal</h3>
+              <p class="card-text">Access your courses, grades, and profile</p>
+              <div class="d-grid gap-2">
+                <a href="student_login.php" class="btn btn-primary btn-lg">Login as Student</a>
+                <a href="student_signup.php" class="btn btn-outline-primary">Sign Up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card portal-card">
+            <div class="card-body text-center">
+              <h3 class="card-title">Faculty Portal</h3>
+              <p class="card-text">Manage students, courses, and grades</p>
+              <div class="d-grid gap-2">
+                <a href="faculty_login.php" class="btn btn-success btn-lg">Login as Faculty</a>
+                <a href="faculty_signup.php" class="btn btn-outline-success">Sign Up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card portal-card">
+            <div class="card-body text-center">
+              <h3 class="card-title">Admin Portal</h3>
+              <p class="card-text">System administration and reporting</p>
+              <div class="d-grid gap-2">
+                <a href="admin_login.php" class="btn btn-dark btn-lg">Login as Admin</a>
+                <small class="text-muted mt-2">For administrators only</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-8 text-center">
+          <div class="features-section mt-5">
+            <h2>Features</h2>
+            <div class="row mt-4">
+              <div class="col-md-4">
+                <div class="feature-item">
+                  <i class="fas fa-book fa-3x mb-3"></i>
+                  <h4>Course Management</h4>
+                  <p>Create and manage courses with detailed information</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="feature-item">
+                  <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                  <h4>Grade Tracking</h4>
+                  <p>Record and monitor student performance</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="feature-item">
+                  <i class="fas fa-file-upload fa-3x mb-3"></i>
+                  <h4>File Management</h4>
+                  <p>Upload and share course materials and assignments</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+
+  <!-- Add to Home Screen Prompt -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="pwaInstallToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Student Management System</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        <p>Install this app on your device for quick access.</p>
+        <div class="mt-2 pt-2 border-top">
+          <button type="button" id="pwaInstallBtn" class="btn btn-primary btn-sm">Install</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Not now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PWA Install Prompt
+    let deferredPrompt;
+    const pwaInstallToast = document.getElementById('pwaInstallToast');
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+      // Show the install button
+      if (pwaInstallToast) {
+        const toast = new bootstrap.Toast(pwaInstallToast);
+        toast.show();
+      }
+    });
+
+    if (pwaInstallBtn) {
+      pwaInstallBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        // We've used the prompt, and can't use it again, throw it away
+        deferredPrompt = null;
+        // Hide the toast
+        const toast = bootstrap.Toast.getInstance(pwaInstallToast);
+        if (toast) toast.hide();
+      });
+    }
+  </script>
+</body>
+</html>
